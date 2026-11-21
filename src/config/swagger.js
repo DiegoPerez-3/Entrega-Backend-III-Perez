@@ -2,7 +2,7 @@ import swaggerJSDoc from 'swagger-jsdoc';
 import path from 'path';
 import __dirname from '../utils/index.js';
 
-// Normaliza la ruta de archivos YAML con barras POSIX para compatibilidad multiplataforma con glob.
+// Normaliza barras a formato POSIX para que glob resuelva los YAML en Windows y Linux.
 const docsPattern = path.join(__dirname, '../docs/**/*.yaml').replace(/\\/g, '/');
 
 const swaggerOpts = {

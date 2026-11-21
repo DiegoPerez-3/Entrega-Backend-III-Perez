@@ -1,4 +1,3 @@
-// DTO (Data Transfer Object) para exponer únicamente los datos no sensibles del usuario en el token JWT.
 export default class UserDTO {
     static getUserTokenFrom = (user) => {
         return {

@@ -1,4 +1,3 @@
-// Repositorio genérico que abstrae las operaciones CRUD delegando en el DAO recibido por constructor.
 export default class GenericRepository {
     constructor(dao) {
         this.dao = dao;

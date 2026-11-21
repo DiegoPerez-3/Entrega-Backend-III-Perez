@@ -2,11 +2,8 @@ import mongoose from 'mongoose';
 import { createPets, createUsers } from '../utils/faker/mocks.js';
 import { usersService, petsService } from '../services/index.js';
 
-// Controlador para Mocks.
-// Conecta las rutas de /api/mocks con el generador de datos sintéticos y los servicios de persistencia.
 const MAX_MOCK_QUANTITY = 5000;
 
-// Valida el parámetro opcional quantity recibido por query string (por defecto 50).
 const parseQueryQuantity = (rawQuantity, defaultQuantity = 50) => {
     if (rawQuantity === undefined) {
         return { valid: true, value: defaultQuantity };
@@ -30,7 +27,6 @@ const parseQueryQuantity = (rawQuantity, defaultQuantity = 50) => {
     return { valid: true, value: parsed };
 };
 
-// Valida que los campos numéricos del body (users y pets) sean enteros no negativos.
 const validateBodyCount = (value, fieldName) => {
     if (value === undefined || value === null) {
         return {
@@ -49,13 +45,11 @@ const validateBodyCount = (value, fieldName) => {
     return { valid: true, value };
 };
 
-// Middleware que asigna la cantidad solicitada por query a la request.
 export const getQuantity = (req, res, next) => {
     req.quantity = req.query.quantity;
     next();
 };
 
-// Genera mascotas simuladas sin guardarlas en MongoDB (50 por defecto).
 export const getPets = async (req, res) => {
     try {
         const rawQuantity = req.quantity !== undefined ? req.quantity : req.query.quantity;
@@ -71,7 +65,6 @@ export const getPets = async (req, res) => {
     }
 };
 
-// Genera usuarios simulados sin guardarlos en MongoDB (50 por defecto).
 export const getUsers = async (req, res) => {
     try {
         const rawQuantity = req.quantity !== undefined ? req.quantity : req.query.quantity;
@@ -87,7 +80,6 @@ export const getUsers = async (req, res) => {
     }
 };
 
-// Genera e inserta en MongoDB la cantidad de usuarios y mascotas indicada en req.body.
 export const generateData = async (req, res) => {
     const createdUsers = [];
     const createdPets = [];
@@ -105,7 +97,6 @@ export const generateData = async (req, res) => {
             return res.status(400).send({ status: 'error', error: petsValidation.error });
         }
 
-        // Verificar que la conexión con MongoDB esté activa antes de intentar persistir.
         if (mongoose.connection.readyState !== 1) {
             return res.status(503).send({
                 status: 'error',
@@ -116,7 +107,6 @@ export const generateData = async (req, res) => {
         const mockUsers = await createUsers(usersValidation.value);
         const mockPets = createPets(petsValidation.value);
 
-        // Persistir los registros generados mediante los servicios existentes registrando cada inserción efectiva.
         await Promise.all(
             mockUsers.map(async (user) => {
                 const created = await usersService.create(user);

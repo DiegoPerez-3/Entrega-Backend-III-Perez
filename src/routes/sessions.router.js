@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import sessionsController from '../controllers/sessions.controller.js';
 
-// Router para autenticación y manejo de sesiones (/api/sessions).
 const router = Router();
 
 router.post('/register', sessionsController.register);

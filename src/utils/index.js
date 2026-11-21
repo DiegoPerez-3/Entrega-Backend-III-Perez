@@ -3,7 +3,6 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { config } from 'dotenv';
 
-// Carga de variables de entorno desde el archivo .env y definición de valores por defecto.
 config();
 
 const isTestMode =
@@ -12,7 +11,7 @@ const isTestMode =
     process.argv.includes('test') ||
     process.argv.some((arg) => /mocha|test/i.test(arg));
 
-// Resuelve la URI de MongoDB garantizando aislamiento de la base de datos en entorno de test.
+// En modo test fuerza el uso de una base de datos separada (adoptme_test) para no tocar AdoptMe.
 const resolveMongoUri = () => {
     if (isTestMode) {
         if (process.env.MONGO_URI && /test/i.test(process.env.MONGO_URI)) {
@@ -31,13 +30,11 @@ export const environment = {
     MODE: isTestMode ? 'test' : (process.env.MODE || 'dev')
 };
 
-// Genera un hash irreversible de la contraseña utilizando bcrypt con 10 rondas de salt.
 export const createHash = async (password) => {
     const salts = await bcrypt.genSalt(10);
     return bcrypt.hash(password, salts);
 };
 
-// Compara una contraseña en texto plano contra el hash almacenado del usuario.
 export const passwordValidation = async (user, password) => bcrypt.compare(password, user.password);
 
 const __filename = fileURLToPath(import.meta.url);

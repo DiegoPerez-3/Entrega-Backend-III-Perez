@@ -1,6 +1,5 @@
 import petModel from './models/Pet.js';
 
-// DAO (Data Access Object) para la colección Pets en MongoDB.
 export default class Pet {
 
     get = (params) => {

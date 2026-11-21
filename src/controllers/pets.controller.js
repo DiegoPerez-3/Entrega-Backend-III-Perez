@@ -2,8 +2,6 @@ import PetDTO from '../dto/Pet.dto.js';
 import { petsService } from '../services/index.js';
 import __dirname from '../utils/index.js';
 
-// Controlador para Mascotas.
-// Conecta las rutas de /api/pets con petsService y PetDTO.
 const getAllPets = async (req, res) => {
     try {
         const pets = await petsService.getAll();

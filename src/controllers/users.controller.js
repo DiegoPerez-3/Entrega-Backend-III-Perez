@@ -1,12 +1,10 @@
 import mongoose from 'mongoose';
 import { usersService } from '../services/index.js';
 
-// Verifica que el identificador sea un ObjectId hexadecimal válido de 24 caracteres.
+// Valida que el parámetro sea un ObjectId hexadecimal de 24 caracteres antes de consultar Mongoose.
 const isValidObjectId = (id) =>
     mongoose.Types.ObjectId.isValid(id) && /^[0-9a-fA-F]{24}$/.test(String(id));
 
-// Controlador para Usuarios.
-// Conecta las rutas de /api/users con usersService.
 const getAllUsers = async (req, res) => {
     try {
         const users = await usersService.getAll();

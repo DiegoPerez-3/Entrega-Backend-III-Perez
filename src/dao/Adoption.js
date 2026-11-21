@@ -1,6 +1,5 @@
 import adoptionModel from './models/Adoption.js';
 
-// DAO (Data Access Object) para la colección Adoptions en MongoDB.
 export default class Adoption {
 
     get = (params) => {

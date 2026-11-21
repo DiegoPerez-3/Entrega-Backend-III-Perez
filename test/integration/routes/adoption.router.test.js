@@ -8,7 +8,6 @@ import { generateUser, generatePet } from '../../../src/utils/faker/mocks.js';
 
 const requester = supertest(baseUrl);
 
-// Suite de tests funcionales de integración para los endpoints de /api/adoptions.
 describe('Tests funcionales - Router de Adopciones (/api/adoptions)', function () {
     this.timeout(15000);
 
@@ -25,13 +24,11 @@ describe('Tests funcionales - Router de Adopciones (/api/adoptions)', function (
         await disconnectTestDb();
     });
 
-    // Helper para persistir un usuario de prueba válido en la colección Users.
     const createTestUser = async (overrides = {}) => {
         const mockUser = await generateUser();
         return usersService.create({ ...mockUser, ...overrides });
     };
 
-    // Helper para persistir una mascota de prueba válida en la colección Pets.
     const createTestPet = async (overrides = {}) => {
         const mockPet = generatePet();
         return petsService.create({ ...mockPet, ...overrides });

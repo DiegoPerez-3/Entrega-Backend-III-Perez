@@ -85,7 +85,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/requestBodies/UpdateUser"
+              $ref: "#/components/schemas/UpdateUser"
       responses:
         "200":
           description: Usuario actualizado exitosamente.
@@ -221,9 +221,34 @@ components:
         first_name: "Lucia"
         last_name: "Gomez"
         email: "lucia.gomez@example.com"
-        password: "<bcrypt_hash_placeholder>"
+        password: "$2b$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy"
         role: "user"
         pets: []
+
+    UpdateUser:
+      type: object
+      properties:
+        first_name:
+          type: string
+          description: Nuevo nombre del usuario.
+        last_name:
+          type: string
+          description: Nuevo apellido del usuario.
+        email:
+          type: string
+          format: email
+          description: Nuevo correo electrónico único del usuario.
+        role:
+          type: string
+          description: Rol asignado al usuario.
+          enum:
+            - user
+            - admin
+      example:
+        first_name: "Lucia"
+        last_name: "Gomez Actualizada"
+        email: "lucia.gomez@example.com"
+        role: "admin"
 
     UsersListResponse:
       type: object
@@ -274,29 +299,3 @@ components:
         error:
           type: string
           example: User not found
-
-  requestBodies:
-    UpdateUser:
-      type: object
-      properties:
-        first_name:
-          type: string
-          description: Nuevo nombre del usuario.
-        last_name:
-          type: string
-          description: Nuevo apellido del usuario.
-        email:
-          type: string
-          format: email
-          description: Nuevo correo electrónico único del usuario.
-        role:
-          type: string
-          description: Rol asignado al usuario.
-          enum:
-            - user
-            - admin
-      example:
-        first_name: "Lucia"
-        last_name: "Gomez Actualizada"
-        email: "lucia.gomez@example.com"
-        role: "admin"

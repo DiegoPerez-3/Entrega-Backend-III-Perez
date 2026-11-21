@@ -1,4 +1,3 @@
-// DTO (Data Transfer Object) para normalizar los datos de entrada de una mascota.
 export default class PetDTO {
     static getPetInputFrom = (pet) => {
         return {

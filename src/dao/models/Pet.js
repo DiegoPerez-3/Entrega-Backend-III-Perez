@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 
-// Esquema y modelo de Mongoose para la colección Pets.
 const collection = 'Pets';
 
 const schema = new mongoose.Schema({

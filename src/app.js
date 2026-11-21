@@ -11,25 +11,20 @@ import adoptionsRouter from './routes/adoption.router.js';
 import sessionsRouter from './routes/sessions.router.js';
 import mocksRouter from './routes/mocks.router.js';
 
-// Configuración principal de la aplicación Express.
 const app = express();
 const PORT = environment.PORT;
 
-// Middlewares globales para parseo de JSON y cookies.
 app.use(express.json());
 app.use(cookieParser());
 
-// Documentación interactiva Swagger UI.
 app.use('/api/docs', swaggerUIExpress.serve, swaggerUIExpress.setup(swaggerSpec));
 
-// Montaje de routers de la API.
 app.use('/api/users', usersRouter);
 app.use('/api/pets', petsRouter);
 app.use('/api/adoptions', adoptionsRouter);
 app.use('/api/sessions', sessionsRouter);
 app.use('/api/mocks', mocksRouter);
 
-// Inicio del servidor HTTP y conexión a la base de datos MongoDB.
 app.listen(PORT, () => {
     console.log(`Listening on ${PORT}`);
     mongoose.connect(environment.MONGO_URI)

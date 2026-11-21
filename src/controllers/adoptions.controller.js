@@ -1,12 +1,10 @@
 import mongoose from 'mongoose';
 import { adoptionsService, petsService, usersService } from '../services/index.js';
 
-// Verifica que el identificador sea un ObjectId hexadecimal válido de 24 caracteres.
+// Valida que el parámetro sea un ObjectId hexadecimal de 24 caracteres antes de consultar Mongoose.
 const isValidObjectId = (id) =>
     mongoose.Types.ObjectId.isValid(id) && /^[0-9a-fA-F]{24}$/.test(String(id));
 
-// Controlador para Adopciones.
-// Gestiona el registro de adopciones vinculando usuarios y mascotas.
 const getAllAdoptions = async (req, res) => {
     try {
         const result = await adoptionsService.getAll();
@@ -41,7 +39,6 @@ const createAdoption = async (req, res) => {
         const pet = await petsService.getBy({ _id: pid });
         if (!pet) return res.status(404).send({ status: 'error', error: 'Pet not found' });
         if (pet.adopted) return res.status(400).send({ status: 'error', error: 'Pet is already adopted' });
-        // Vincula la mascota al usuario y actualiza el estado de adopción en ambas colecciones.
         user.pets.push(pet._id);
         await usersService.update(user._id, { pets: user.pets });
         await petsService.update(pet._id, { adopted: true, owner: user._id });

@@ -1,38 +1,34 @@
 # AdoptMe API — Backend III (Entrega Final)
 
-API REST para la gestión de adopción de mascotas desarrollada con **Node.js**, **Express** y **MongoDB (Mongoose)**. Esta entrega integra la documentación interactiva con **Swagger (OpenAPI 3.0)** del módulo de Usuarios, **tests funcionales de integración** con **Mocha, Chai y Supertest** para el router de Adopciones, **Dockerización** completa del proyecto y el módulo de **Mocking** con **Faker.js** y **bcrypt** desarrollado en la Primera Preentrega.
+API REST para la gestión de adopción de mascotas desarrollada con **Node.js**, **Express** y **MongoDB (Mongoose)** para el curso de Backend III en Coderhouse.
+
+## 1. Contenido de la entrega
+
+- **Documentación con Swagger (`src/config/swagger.js` y `src/docs/Users/Users.yaml`):**
+  - Swagger UI disponible en `GET /api/docs`.
+  - Documentación OpenAPI 3.0.1 para los cuatro endpoints del módulo **Users** (`GET /api/users`, `GET /api/users/{uid}`, `PUT /api/users/{uid}`, `DELETE /api/users/{uid}`).
+- **Tests funcionales (`test/integration/routes/adoption.router.test.js`):**
+  - 12 tests de integración con **Mocha**, **Chai** y **Supertest** para los endpoints de `adoption.router.js` (`GET /api/adoptions`, `GET /api/adoptions/:aid`, `POST /api/adoptions/:uid/:pid`).
+  - Los tests corren contra una base separada (`adoptme_test`) para no alterar los datos de desarrollo (`AdoptMe`).
+- **Dockerización (`Dockerfile`, `.dockerignore`, `docker-compose.yml`):**
+  - Imagen basada en `node:24-alpine` publicada en Docker Hub ([`diegojpm2001/backend3-adoptme`](https://hub.docker.com/r/diegojpm2001/backend3-adoptme)).
+  - Archivo `docker-compose.yml` para levantar la API junto con una instancia de `mongo:7`.
+- **Módulo de Mocks (`src/routes/mocks.router.js` y `src/utils/faker/mocks.js`):**
+  - Endpoints `/api/mocks/mockingpets`, `/api/mocks/mockingusers` y `/api/mocks/generateData` desarrollados en la primera preentrega.
 
 ---
 
-## 1. Alcance de la Entrega Final
+## 2. Tecnologías y estructura del proyecto
 
-1. **Documentación con Swagger (`src/config/swagger.js` y `src/docs/Users/Users.yaml`):**
-   - Interfaz interactiva **Swagger UI** montada en `GET /api/docs`.
-   - Especificación **OpenAPI 3.0.1** completa para los 4 endpoints del router de Usuarios (`GET /api/users`, `GET /api/users/{uid}`, `PUT /api/users/{uid}`, `DELETE /api/users/{uid}`), incluyendo esquemas (`User`, `UserPetRef`, `UsersListResponse`, `UserResponse`, `UserMessageResponse`, `UserDeletedResponse`, `ErrorResponse`), `requestBodies` (`UpdateUser`) y respuestas `200`, `400`, `404` y `500`.
-2. **Tests funcionales de integración (`test/integration/routes/adoption.router.test.js`):**
-   - Cobertura exhaustiva de todos los endpoints de `adoption.router.js` (`GET /api/adoptions`, `GET /api/adoptions/:aid`, `POST /api/adoptions/:uid/:pid`) con **12 casos de prueba** (éxito, errores `400`/`404`, persistencia cruzada en MongoDB e idempotencia/concurrencia).
-   - Ejecución aislada en subproceso contra la base de datos de pruebas `adoptme_test`, con guardia de seguridad que impide limpiar o alterar la base de desarrollo `AdoptMe`.
-3. **Dockerización (`Dockerfile`, `.dockerignore`, `docker-compose.yml`):**
-   - Imagen ligera basada en `node:24-alpine` con instalación limpia de dependencias de producción (`npm ci --omit=dev`).
-   - Orquestación opcional con `docker-compose.yml` (`app` + `mongo:7`).
-4. **Módulo de Mocks — Preentrega 1 (`src/routes/mocks.router.js` y `src/utils/faker/mocks.js`):**
-   - `GET /api/mocks/mockingpets`, `GET /api/mocks/mockingusers` y `POST /api/mocks/generateData`.
-
----
-
-## 2. Stack Tecnológico y Estructura del Proyecto
-
-- **Entorno de ejecución:** Node.js (ES Modules, `"type": "module"`)
-- **Framework web:** Express `^4.18.2`
-- **Base de datos y ODM:** MongoDB + Mongoose `^6.7.5`
-- **Documentación API:** `swagger-jsdoc` `^6.3.0` + `swagger-ui-express` `^5.0.1`
-- **Testing funcional:** `mocha` `^12.0.3` + `chai` `^6.3.0` + `supertest` `^7.3.2`
-- **Generación de datos sintéticos:** `@faker-js/faker` `^9.9.0`
-- **Seguridad y utilidades:** `bcrypt` `^5.1.0`, `jsonwebtoken` `^8.5.1`, `cookie-parser` `^1.4.6`, `multer` `^1.4.5-lts.1`, `dotenv` `^17.2.3`
-- **Contenedores y CI:** Docker (`node:24-alpine`, `mongo:7`) y GitHub Actions (`.github/workflows/ci-cd.yml`)
+- **Node.js** (ES Modules, `"type": "module"`)
+- **Express** `^4.18.2`
+- **MongoDB + Mongoose** `^6.7.5`
+- **Swagger:** `swagger-jsdoc` `^6.3.0` y `swagger-ui-express` `^5.0.1`
+- **Testing:** `mocha` `^12.0.3`, `chai` `^6.3.0` y `supertest` `^7.3.2`
+- **Mocks y utilidades:** `@faker-js/faker` `^9.9.0`, `bcrypt` `^5.1.0`, `jsonwebtoken` `^8.5.1`, `cookie-parser` `^1.4.6`, `multer` `^1.4.5-lts.1`, `dotenv` `^17.2.3`
 
 ```text
-Entrega-1/
+Entrega-Backend-III-Perez/
 ├── .github/
 │   └── workflows/
 │       └── ci-cd.yml
@@ -96,16 +92,15 @@ Entrega-1/
 
 ---
 
-## 3. Instalación y Ejecución Local
+## 3. Instalación y ejecución local
 
 ### Requisitos previos
 - **Node.js** v20 o v24 LTS.
-- **MongoDB** en ejecución local (por ejemplo, en `mongodb://localhost:27017`).
-- **Docker Desktop** (para construir y ejecutar la imagen contenedorizada).
+- **MongoDB** corriendo localmente (por defecto en `mongodb://localhost:27017`).
 
-### Configuración paso a paso
+### Pasos
 
-1. Instalar las dependencias del proyecto:
+1. Instalar dependencias:
    ```bash
    npm install
    ```
@@ -114,177 +109,157 @@ Entrega-1/
    ```bash
    cp example.env .env
    ```
-   Variables de entorno disponibles:
+   Variables utilizadas:
    ```env
    PORT=8080
    MONGO_URI=mongodb://localhost:27017/AdoptMe
    ```
-   *(Opcionalmente pueden definirse `MONGO_URI_TEST` y `PORT_TEST` para personalizar el entorno de pruebas; por defecto los tests utilizan `mongodb://127.0.0.1:27017/adoptme_test`).*
+   *(Opcionalmente se puede definir `MONGO_URI_TEST` o `PORT_TEST` para los tests; si no se definen, en modo test se usa `mongodb://127.0.0.1:27017/adoptme_test`).*
 
 3. Iniciar el servidor:
-   - **Modo producción / normal:**
-     ```bash
-     npm start
-     ```
-   - **Modo desarrollo (con recarga `--watch`):**
-     ```bash
-     npm run dev
-     ```
+   ```bash
+   # Ejecución normal
+   npm start
 
-El servidor escuchará en `http://localhost:8080`.
+   # Modo desarrollo con recarga automática
+   npm run dev
+   ```
 
 ---
 
-## 4. Documentación con Swagger (`/api/docs`)
+## 4. Documentación con Swagger y endpoints
 
-Con el servidor en ejecución, acceder desde el navegador a:
+Con el servidor levantado, la documentación interactiva se encuentra en:
 
-- **URL Swagger UI:** [http://localhost:8080/api/docs](http://localhost:8080/api/docs)
+- **Swagger UI:** `http://localhost:8080/api/docs`
 
-### Endpoints documentados en Swagger (`Users`)
+### Módulo Users (documentado en Swagger)
 
-| Método | Ruta | Descripción | Códigos de respuesta |
+| Método | Ruta | Descripción | Respuestas |
 | :--- | :--- | :--- | :--- |
-| `GET` | `/api/users` | Obtiene todos los usuarios registrados en la colección `Users`. | `200`, `500` |
-| `GET` | `/api/users/{uid}` | Obtiene un usuario específico por su `ObjectId`. | `200`, `400`, `404`, `500` |
-| `PUT` | `/api/users/{uid}` | Actualiza los datos de un usuario existente por su `ObjectId`. | `200`, `400`, `404`, `500` |
-| `DELETE` | `/api/users/{uid}` | Elimina un usuario existente por su `ObjectId`. | `200`, `400`, `404`, `500` |
+| `GET` | `/api/users` | Lista todos los usuarios registrados. | `200`, `500` |
+| `GET` | `/api/users/{uid}` | Obtiene un usuario por su `ObjectId`. | `200`, `400`, `404`, `500` |
+| `PUT` | `/api/users/{uid}` | Actualiza los datos de un usuario por su `ObjectId`. | `200`, `400`, `404`, `500` |
+| `DELETE` | `/api/users/{uid}` | Elimina un usuario por su `ObjectId`. | `200`, `400`, `404`, `500` |
 
-### Resumen general de endpoints de la API
+### Otras rutas de la API
 
-- **Users (`/api/users`):**
-  - `GET /api/users`
-  - `GET /api/users/:uid`
-  - `PUT /api/users/:uid`
-  - `DELETE /api/users/:uid`
 - **Adoptions (`/api/adoptions`):**
-  - `GET /api/adoptions` — Lista todas las adopciones registradas.
+  - `GET /api/adoptions` — Lista todas las adopciones.
   - `GET /api/adoptions/:aid` — Obtiene una adopción por su `ObjectId`.
-  - `POST /api/adoptions/:uid/:pid` — Registra la adopción de la mascota `:pid` por el usuario `:uid`, actualizando `pet.adopted = true`, `pet.owner = uid`, agregando la mascota a `user.pets` y creando el documento en `Adoptions`.
+  - `POST /api/adoptions/:uid/:pid` — Registra la adopción de la mascota `:pid` por el usuario `:uid`, marcando `pet.adopted = true`, `pet.owner = uid` y agregando la mascota a `user.pets`.
 - **Pets (`/api/pets`):**
   - `GET /api/pets`, `POST /api/pets`, `POST /api/pets/withimage`, `PUT /api/pets/:pid`, `DELETE /api/pets/:pid`
 - **Sessions (`/api/sessions`):**
   - `POST /api/sessions/register`, `POST /api/sessions/login`, `GET /api/sessions/current`, `GET /api/sessions/unprotectedLogin`, `GET /api/sessions/unprotectedCurrent`
 - **Mocks (`/api/mocks`):**
   - `GET /api/mocks/mockingpets` (opcional `?quantity=N`, por defecto `50`)
-  - `GET /api/mocks/mockingusers` (opcional `?quantity=N`, por defecto `50`, password `"coder123"` hasheada con bcrypt, rol `user`/`admin`, `pets: []`)
-  - `POST /api/mocks/generateData` (body `{ "users": N, "pets": M }`, inserta los registros en MongoDB)
+  - `GET /api/mocks/mockingusers` (opcional `?quantity=N`, por defecto `50`, contraseña `"coder123"` hasheada con bcrypt, rol `user`/`admin`, `pets: []`)
+  - `POST /api/mocks/generateData` (body `{ "users": N, "pets": M }`, inserta los documentos en MongoDB)
 
 ---
 
-## 5. Ejecución de Tests Funcionales (`adoption.router.js`)
+## 5. Tests funcionales (`adoption.router.js`)
 
-Los tests funcionales utilizan **Mocha**, **Chai** y **Supertest**. El hook global (`test/helpers/server.js`) levanta automáticamente la aplicación en un subproceso con `MODE=test` conectada a la base de datos **`adoptme_test`**, y `test/helpers/db.js` verifica que el nombre de la base contenga `"test"` antes de limpiar colecciones.
-
-### Comandos de ejecución
+Para ejecutar la suite de tests funcionales:
 
 ```bash
 npm test
 ```
-o bien:
+o:
 ```bash
 npm run test:integration
 ```
 
-### Matriz de los 12 casos de prueba implementados
+El helper `test/helpers/server.js` inicia la aplicación en un subproceso con `MODE=test` apuntando a `adoptme_test`, y `test/helpers/db.js` comprueba que el nombre de la base contenga `"test"` antes de limpiar las colecciones en cada prueba.
 
-| ID | Endpoint | Escenario verificado | Resultado esperado |
+### Casos cubiertos
+
+| ID | Endpoint | Caso probado | Respuesta esperada |
 | :--- | :--- | :--- | :--- |
-| `T01` | `GET /api/adoptions` | Base de datos sin adopciones registradas | `200 OK` — `{ status: "success", payload: [] }` |
-| `T02` | `GET /api/adoptions` | Existen adopciones previamente creadas | `200 OK` — `payload` con las adopciones (`_id`, `owner`, `pet`) |
-| `T03` | `GET /api/adoptions/:aid` | `:aid` corresponde a una adopción existente | `200 OK` — `payload` con la adopción solicitada |
-| `T04` | `GET /api/adoptions/:aid` | `:aid` es un `ObjectId` válido pero inexistente | `404 Not Found` — `{ status: "error", error: "Adoption not found" }` |
-| `T05` | `GET /api/adoptions/:aid` | `:aid` tiene un formato de `ObjectId` inválido | `400 Bad Request` — `{ status: "error", error: "Invalid adoption ID" }` |
-| `T06` | `POST /api/adoptions/:uid/:pid` | Usuario y mascota existen y la mascota no está adoptada | `200 OK` — `{ status: "success", message: "Pet adopted" }` |
-| `T07` | `POST /api/adoptions/:uid/:pid` | `:uid` es un `ObjectId` válido pero el usuario no existe | `404 Not Found` — `{ status: "error", error: "user Not found" }` |
-| `T08` | `POST /api/adoptions/:uid/:pid` | `:pid` es un `ObjectId` válido pero la mascota no existe | `404 Not Found` — `{ status: "error", error: "Pet not found" }` |
-| `T09` | `POST /api/adoptions/:uid/:pid` | La mascota ya tenía `adopted: true` | `400 Bad Request` — `{ status: "error", error: "Pet is already adopted" }` |
-| `T10` | `POST /api/adoptions/:uid/:pid` | Verificación de efectos secundarios en MongoDB tras adoptar | `pet.adopted === true`, `pet.owner === uid`, `user.pets` contiene `pid` y existe el documento en `Adoptions` |
-| `T11` | `POST /api/adoptions/:uid/:pid` | `:uid` o `:pid` tienen formato de `ObjectId` inválido | `400 Bad Request` — `{ status: "error", error: "Invalid user or pet ID" }` |
-| `T12` | `POST /api/adoptions/:uid/:pid` | Segundo intento de adoptar la misma mascota por otro usuario | `400 Bad Request` — `{ status: "error", error: "Pet is already adopted" }` y se conserva 1 sola adopción |
+| `T01` | `GET /api/adoptions` | Base de datos sin adopciones | `200` — `{ status: "success", payload: [] }` |
+| `T02` | `GET /api/adoptions` | Listado con adopciones cargadas | `200` — arreglo con las adopciones (`_id`, `owner`, `pet`) |
+| `T03` | `GET /api/adoptions/:aid` | Búsqueda por `:aid` existente | `200` — adopción correspondiente |
+| `T04` | `GET /api/adoptions/:aid` | `:aid` con formato `ObjectId` válido pero inexistente | `404` — `Adoption not found` |
+| `T05` | `GET /api/adoptions/:aid` | `:aid` con formato inválido | `400` — `Invalid adoption ID` |
+| `T06` | `POST /api/adoptions/:uid/:pid` | Adopción válida con usuario y mascota disponibles | `200` — `Pet adopted` |
+| `T07` | `POST /api/adoptions/:uid/:pid` | Usuario inexistente (`ObjectId` válido) | `404` — `user Not found` (sin modificar la mascota) |
+| `T08` | `POST /api/adoptions/:uid/:pid` | Mascota inexistente (`ObjectId` válido) | `404` — `Pet not found` (sin modificar al usuario) |
+| `T09` | `POST /api/adoptions/:uid/:pid` | Mascota que ya figura como adoptada | `400` — `Pet is already adopted` |
+| `T10` | `POST /api/adoptions/:uid/:pid` | Verificación en BD luego de adoptar | `pet.adopted === true`, `pet.owner === uid`, `user.pets` incluye `pid` y documento creado en `Adoptions` |
+| `T11` | `POST /api/adoptions/:uid/:pid` | `:uid` o `:pid` con formato de `ObjectId` inválido | `400` — `Invalid user or pet ID` |
+| `T12` | `POST /api/adoptions/:uid/:pid` | Rechazo de un segundo intento secuencial de adopción sobre la misma mascota | `400` — `Pet is already adopted` y se mantiene una única adopción |
 
 ---
 
-## 6. Dockerización e Imagen en Docker Hub
+## 6. Docker y Docker Hub
 
-### 6.1. Imagen Pública en Docker Hub
+### Imagen publicada en Docker Hub
 
-- **Enlace público a Docker Hub:** [https://hub.docker.com/r/diegojpm2001/backend3-adoptme](https://hub.docker.com/r/diegojpm2001/backend3-adoptme)
-- **Repositorio de imagen:** `diegojpm2001/backend3-adoptme`
-- **Tags publicados:** `1.0.0` y `latest`
+- **Repositorio público:** [https://hub.docker.com/r/diegojpm2001/backend3-adoptme](https://hub.docker.com/r/diegojpm2001/backend3-adoptme)
+- **Tags disponibles:**
+  - `diegojpm2001/backend3-adoptme:1.0.0`
+  - `diegojpm2001/backend3-adoptme:latest`
 
-Comandos para descargar y ejecutar directamente la imagen publicada desde Docker Hub:
+Descargar la imagen desde Docker Hub:
 
 ```bash
-# 1. Descargar la imagen desde Docker Hub
 docker pull diegojpm2001/backend3-adoptme:1.0.0
-# o bien:
+# o
 docker pull diegojpm2001/backend3-adoptme:latest
-
-# 2. Ejecutar el contenedor conectándolo a MongoDB del host (host.docker.internal)
-docker run --rm --name backend3-adoptme -p 8080:8080 -e PORT=8080 -e MONGO_URI=mongodb://host.docker.internal:27017/AdoptMe diegojpm2001/backend3-adoptme:1.0.0
 ```
 
-Comandos utilizados para autenticar, construir, etiquetar y publicar la imagen en Docker Hub:
+### Construir y correr el contenedor manualmente
 
-```bash
-# 1. Iniciar sesión en Docker Hub
-docker login
-
-# 2. Construir y etiquetar la imagen con versión y latest
-docker build -t diegojpm2001/backend3-adoptme:1.0.0 -t diegojpm2001/backend3-adoptme:latest .
-
-# 3. Subir la imagen a Docker Hub
-docker push diegojpm2001/backend3-adoptme:1.0.0
-docker push diegojpm2001/backend3-adoptme:latest
-```
-
-### 6.2. Construcción y ejecución local con `docker build` y `docker run`
-
-1. **Construir la imagen localmente:**
+1. **Construir la imagen desde el `Dockerfile` local:**
    ```bash
    docker build -t diegojpm2001/backend3-adoptme:1.0.0 .
    ```
 
-2. **Ejecutar el contenedor conectándolo a MongoDB del host (`host.docker.internal`):**
+2. **Ejecutar el contenedor conectándolo a un MongoDB local:**
    ```bash
-   docker run --rm --name backend3-adoptme -p 8080:8080 -e PORT=8080 -e MONGO_URI=mongodb://host.docker.internal:27017/AdoptMe diegojpm2001/backend3-adoptme:1.0.0
+   docker run --rm --name backend3-adoptme \
+     -p 8080:8080 \
+     -e PORT=8080 \
+     -e MONGO_URI=mongodb://host.docker.internal:27017/AdoptMe \
+     diegojpm2001/backend3-adoptme:1.0.0
    ```
+   > **Nota:** `host.docker.internal` permite conectar con el MongoDB del host en Docker Desktop (Windows/macOS). En Linux, o si no se tiene MongoDB instalado en el host, se recomienda levantar ambos servicios con Docker Compose como se muestra a continuación.
 
-### 6.3. Ejecución multicontenedor con Docker Compose (`app` + `mongo:7`)
+### Ejecutar con Docker Compose (`app` + `mongo:7`)
 
 ```bash
 # Construir y levantar la API junto con MongoDB en segundo plano
 docker compose up --build -d
 
-# Consultar los logs del servicio app
+# Ver logs de la aplicación
 docker compose logs -f app
 
-# Detener y eliminar los contenedores
+# Detener los contenedores
 docker compose down
 ```
 
 ---
 
-## 7. Guía Rápida de Verificación Manual
+## 7. Pruebas rápidas y CI
 
-### Con `curl.exe`
+Con el servidor o el contenedor corriendo en `http://localhost:8080`:
 
 ```bash
-# 1. Verificar Swagger UI (responde 200 OK con el HTML de Swagger)
-curl.exe -I http://localhost:8080/api/docs/
+# Swagger UI
+curl -I http://localhost:8080/api/docs/
 
-# 2. Poblar datos de prueba mediante el módulo de Mocks
-curl.exe -X POST "http://localhost:8080/api/mocks/generateData" -H "Content-Type: application/json" -d "{\"users\":3,\"pets\":3}"
+# Generar e insertar usuarios y mascotas de prueba
+curl -X POST "http://localhost:8080/api/mocks/generateData" \
+  -H "Content-Type: application/json" \
+  -d "{\"users\":3,\"pets\":3}"
 
-# 3. Listar usuarios y mascotas insertados
-curl.exe http://localhost:8080/api/users
-curl.exe http://localhost:8080/api/pets
-
-# 4. Listar adopciones registradas
-curl.exe http://localhost:8080/api/adoptions
+# Consultar usuarios, mascotas y adopciones
+curl http://localhost:8080/api/users
+curl http://localhost:8080/api/pets
+curl http://localhost:8080/api/adoptions
 ```
 
-### Integración Continua (GitHub Actions)
+### GitHub Actions (CI)
 
-El repositorio incluye el flujo `.github/workflows/ci-cd.yml` que, ante cada `push` o `pull_request` hacia `main`, levanta un contenedor de servicio `mongo:7`, instala dependencias con `npm ci` bajo Node.js 24 y ejecuta la suite de tests funcionales (`npm test`) contra `mongodb://localhost:27017/adoptme_test`.
+El archivo `.github/workflows/ci-cd.yml` ejecuta automáticamente `npm test` en cada `push` o `pull_request` a la rama `main` utilizando Node.js 24 y un contenedor de servicio `mongo:7` conectado a `mongodb://localhost:27017/adoptme_test`.

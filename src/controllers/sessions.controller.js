@@ -3,8 +3,6 @@ import { createHash, passwordValidation } from '../utils/index.js';
 import jwt from 'jsonwebtoken';
 import UserDTO from '../dto/User.dto.js';
 
-// Controlador para Sesiones y Autenticación (/api/sessions).
-// Maneja el registro de usuarios, inicio de sesión con JWT en cookies y consulta de sesión actual.
 const register = async (req, res) => {
     try {
         const { first_name, last_name, email, password } = req.body;

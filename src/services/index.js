@@ -6,7 +6,6 @@ import UserRepository from '../repository/UserRepository.js';
 import PetRepository from '../repository/PetRepository.js';
 import AdoptionRepository from '../repository/AdoptionRepository.js';
 
-// Instancias de servicios que conectan los repositorios con sus respectivos DAOs de Mongoose.
 export const usersService = new UserRepository(new Users());
 export const petsService = new PetRepository(new Pet());
 export const adoptionsService = new AdoptionRepository(new Adoption());

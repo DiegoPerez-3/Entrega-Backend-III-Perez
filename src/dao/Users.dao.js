@@ -1,6 +1,5 @@
 import userModel from './models/User.js';
 
-// DAO (Data Access Object) para la colección Users en MongoDB.
 export default class Users {
 
     get = (params) => {

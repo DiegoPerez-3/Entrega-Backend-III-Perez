@@ -4,18 +4,13 @@ import { fileURLToPath } from 'url';
 import { environment } from '../../src/utils/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirnameFromUrl(__filename);
-
-function dirnameFromUrl(filePath) {
-    return path.dirname(filePath);
-}
-
+const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '../..');
 
 let serverProcess;
 export const baseUrl = `http://localhost:${environment.PORT}`;
 
-// Inicia la aplicación en un subproceso aislado apuntando a la base de datos de test.
+// Levanta el servidor en un subproceso con MODE=test porque src/app.js ejecuta app.listen al importarse.
 export const startServer = async () => {
     if (serverProcess) return;
 
@@ -60,7 +55,6 @@ export const startServer = async () => {
     });
 };
 
-// Detiene el subproceso del servidor al terminar la ejecución de los tests.
 export const stopServer = async () => {
     if (!serverProcess) return;
 

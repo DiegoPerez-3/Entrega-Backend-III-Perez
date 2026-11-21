@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { environment } from '../../src/utils/index.js';
 
-// Verifica que la conexión activa apunte exclusivamente a una base de datos de pruebas.
+// Impide ejecutar deleteMany sobre una base que no sea de pruebas.
 const assertIsTestDatabase = async () => {
     const dbName = mongoose.connection?.name || '';
     if (!dbName.toLowerCase().includes('test')) {
@@ -13,7 +13,6 @@ const assertIsTestDatabase = async () => {
     }
 };
 
-// Conecta Mongoose a la base de datos de test si aún no existe una conexión activa.
 export const connectTestDb = async () => {
     if (mongoose.connection.readyState === 0) {
         await mongoose.connect(environment.MONGO_URI);
@@ -21,7 +20,6 @@ export const connectTestDb = async () => {
     await assertIsTestDatabase();
 };
 
-// Limpia todas las colecciones de la base de datos de test para aislar cada caso de prueba.
 export const clearTestDb = async () => {
     if (mongoose.connection.readyState !== 1) return;
     await assertIsTestDatabase();
@@ -31,7 +29,6 @@ export const clearTestDb = async () => {
     }
 };
 
-// Cierra la conexión de Mongoose al finalizar la suite de pruebas.
 export const disconnectTestDb = async () => {
     if (mongoose.connection.readyState !== 0) {
         await mongoose.disconnect();

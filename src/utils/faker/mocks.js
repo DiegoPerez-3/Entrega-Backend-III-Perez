@@ -2,10 +2,6 @@ import { faker } from '@faker-js/faker';
 import mongoose from 'mongoose';
 import { createHash } from '../index.js';
 
-// Módulo de Mocking con Faker.js y bcrypt.
-// Construye documentos simulados de usuarios y mascotas con el formato de MongoDB.
-
-// Normaliza texto para construir correos electrónicos válidos sin tildes ni caracteres especiales.
 const sanitizeEmailPart = (value) =>
     String(value || '')
         .normalize('NFD')
@@ -13,12 +9,11 @@ const sanitizeEmailPart = (value) =>
         .replace(/[^a-zA-Z0-9]/g, '')
         .toLowerCase() || 'user';
 
-// Genera un único usuario simulado con contraseña "coder123" hasheada, rol seleccionado aleatoriamente entre user/admin y pets vacío.
 export async function generateUser() {
     const _id = new mongoose.Types.ObjectId();
     const first_name = faker.person.firstName();
     const last_name = faker.person.lastName();
-    // Se incluye el ObjectId en el correo para evitar colisiones de índice único en MongoDB.
+    // Incluye el ObjectId en el email para evitar colisiones con el índice unique de Users.
     const email = `${sanitizeEmailPart(first_name)}.${sanitizeEmailPart(last_name)}.${_id.toString()}@example.com`;
     const password = await createHash('coder123');
     const role = faker.helpers.arrayElement(['user', 'admin']);
@@ -34,7 +29,6 @@ export async function generateUser() {
     };
 }
 
-// Genera una lista de N usuarios simulados esperando todos los hashes de bcrypt.
 export async function createUsers(quantity = 50) {
     const count = Number(quantity);
     if (!Number.isInteger(count) || count <= 0) {
@@ -44,7 +38,6 @@ export async function createUsers(quantity = 50) {
     return Promise.all(Array.from({ length: count }, () => generateUser()));
 }
 
-// Genera una mascota simulada compatible con el esquema Pet (sin owner vacío para no romper ObjectId).
 export function generatePet() {
     const _id = new mongoose.Types.ObjectId();
 
@@ -58,7 +51,6 @@ export function generatePet() {
     };
 }
 
-// Genera una lista de N mascotas simuladas.
 export function createPets(quantity = 50) {
     const count = Number(quantity);
     if (!Number.isInteger(count) || count <= 0) {
