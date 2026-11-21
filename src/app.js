@@ -1,7 +1,9 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
+import swaggerUIExpress from 'swagger-ui-express';
 import { environment } from './utils/index.js';
+import { swaggerSpec } from './config/swagger.js';
 
 import usersRouter from './routes/users.router.js';
 import petsRouter from './routes/pets.router.js';
@@ -16,6 +18,9 @@ const PORT = environment.PORT;
 // Middlewares globales para parseo de JSON y cookies.
 app.use(express.json());
 app.use(cookieParser());
+
+// Documentación interactiva Swagger UI.
+app.use('/api/docs', swaggerUIExpress.serve, swaggerUIExpress.setup(swaggerSpec));
 
 // Montaje de routers de la API.
 app.use('/api/users', usersRouter);

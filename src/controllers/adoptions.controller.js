@@ -1,4 +1,9 @@
+import mongoose from 'mongoose';
 import { adoptionsService, petsService, usersService } from '../services/index.js';
+
+// Verifica que el identificador sea un ObjectId hexadecimal válido de 24 caracteres.
+const isValidObjectId = (id) =>
+    mongoose.Types.ObjectId.isValid(id) && /^[0-9a-fA-F]{24}$/.test(String(id));
 
 // Controlador para Adopciones.
 // Gestiona el registro de adopciones vinculando usuarios y mascotas.
@@ -14,6 +19,9 @@ const getAllAdoptions = async (req, res) => {
 const getAdoption = async (req, res) => {
     try {
         const adoptionId = req.params.aid;
+        if (!isValidObjectId(adoptionId)) {
+            return res.status(400).send({ status: 'error', error: 'Invalid adoption ID' });
+        }
         const adoption = await adoptionsService.getBy({ _id: adoptionId });
         if (!adoption) return res.status(404).send({ status: 'error', error: 'Adoption not found' });
         res.send({ status: 'success', payload: adoption });
@@ -25,6 +33,9 @@ const getAdoption = async (req, res) => {
 const createAdoption = async (req, res) => {
     try {
         const { uid, pid } = req.params;
+        if (!isValidObjectId(uid) || !isValidObjectId(pid)) {
+            return res.status(400).send({ status: 'error', error: 'Invalid user or pet ID' });
+        }
         const user = await usersService.getUserById(uid);
         if (!user) return res.status(404).send({ status: 'error', error: 'user Not found' });
         const pet = await petsService.getBy({ _id: pid });

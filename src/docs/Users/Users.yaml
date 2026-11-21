@@ -1,0 +1,302 @@
+paths:
+  /api/users:
+    get:
+      summary: Obtiene todos los usuarios registrados
+      description: Devuelve la lista completa de usuarios almacenados en la colección Users de MongoDB.
+      tags:
+        - Users
+      responses:
+        "200":
+          description: Lista de usuarios obtenida exitosamente.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UsersListResponse"
+        "500":
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/users/{uid}:
+    get:
+      summary: Obtiene un usuario específico por su ID
+      description: Busca un usuario por su identificador ObjectId de MongoDB.
+      tags:
+        - Users
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: Identificador único del usuario (ObjectId de MongoDB de 24 caracteres hexadecimales).
+          schema:
+            type: string
+            pattern: "^[0-9a-fA-F]{24}$"
+            example: "671d8f4a9c1e4b2a10f8e102"
+      responses:
+        "200":
+          description: Usuario encontrado exitosamente.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        "400":
+          description: El formato del ID proporcionado no es un ObjectId válido.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                status: error
+                error: Invalid user ID
+        "404":
+          description: No se encontró un usuario con el ID especificado.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                status: error
+                error: User not found
+        "500":
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+    put:
+      summary: Actualiza los datos de un usuario por su ID
+      description: Modifica los campos permitidos de un usuario existente identificado por su ObjectId.
+      tags:
+        - Users
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: Identificador único del usuario a actualizar (ObjectId de MongoDB).
+          schema:
+            type: string
+            pattern: "^[0-9a-fA-F]{24}$"
+            example: "671d8f4a9c1e4b2a10f8e102"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/UpdateUser"
+      responses:
+        "200":
+          description: Usuario actualizado exitosamente.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserMessageResponse"
+              example:
+                status: success
+                message: User updated
+        "400":
+          description: El formato del ID proporcionado no es un ObjectId válido.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                status: error
+                error: Invalid user ID
+        "404":
+          description: No se encontró el usuario a actualizar.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                status: error
+                error: User not found
+        "500":
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+    delete:
+      summary: Elimina un usuario por su ID
+      description: Borra permanentemente de la colección Users al usuario correspondiente al ObjectId indicado.
+      tags:
+        - Users
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: Identificador único del usuario a eliminar (ObjectId de MongoDB).
+          schema:
+            type: string
+            pattern: "^[0-9a-fA-F]{24}$"
+            example: "671d8f4a9c1e4b2a10f8e102"
+      responses:
+        "200":
+          description: Usuario eliminado exitosamente.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDeletedResponse"
+              example:
+                status: success
+                message: User deleted
+        "400":
+          description: El formato del ID proporcionado no es un ObjectId válido.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                status: error
+                error: Invalid user ID
+        "404":
+          description: No se encontró el usuario a eliminar.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                status: error
+                error: User not found
+        "500":
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+components:
+  schemas:
+    UserPetRef:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ObjectId de la mascota adoptada asociada al usuario.
+      example:
+        _id: "671d8f4a9c1e4b2a10f8e101"
+
+    User:
+      type: object
+      required:
+        - first_name
+        - last_name
+        - email
+        - password
+      properties:
+        _id:
+          type: string
+          description: Identificador autogenerado por MongoDB (ObjectId).
+        first_name:
+          type: string
+          description: Nombre del usuario.
+        last_name:
+          type: string
+          description: Apellido del usuario.
+        email:
+          type: string
+          format: email
+          description: Correo electrónico único del usuario.
+        password:
+          type: string
+          description: Hash bcrypt de la contraseña del usuario.
+        role:
+          type: string
+          description: Rol del usuario en la plataforma (user o admin).
+          enum:
+            - user
+            - admin
+        pets:
+          type: array
+          description: Lista de mascotas adoptadas por el usuario.
+          items:
+            $ref: "#/components/schemas/UserPetRef"
+      example:
+        _id: "671d8f4a9c1e4b2a10f8e102"
+        first_name: "Lucia"
+        last_name: "Gomez"
+        email: "lucia.gomez@example.com"
+        password: "<bcrypt_hash_placeholder>"
+        role: "user"
+        pets: []
+
+    UsersListResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        payload:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
+
+    UserResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        payload:
+          $ref: "#/components/schemas/User"
+
+    UserMessageResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+          example: User updated
+
+    UserDeletedResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+          example: User deleted
+
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: error
+        error:
+          type: string
+          example: User not found
+
+  requestBodies:
+    UpdateUser:
+      type: object
+      properties:
+        first_name:
+          type: string
+          description: Nuevo nombre del usuario.
+        last_name:
+          type: string
+          description: Nuevo apellido del usuario.
+        email:
+          type: string
+          format: email
+          description: Nuevo correo electrónico único del usuario.
+        role:
+          type: string
+          description: Rol asignado al usuario.
+          enum:
+            - user
+            - admin
+      example:
+        first_name: "Lucia"
+        last_name: "Gomez Actualizada"
+        email: "lucia.gomez@example.com"
+        role: "admin"

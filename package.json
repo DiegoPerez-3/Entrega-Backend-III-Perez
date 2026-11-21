@@ -1,12 +1,14 @@
 {
   "name": "entrega-1-backend-iii",
   "version": "1.0.0",
-  "description": "API AdoptMe - Backend III Primera Preentrega",
+  "description": "API AdoptMe - Backend III Entrega Final",
   "main": "src/app.js",
   "type": "module",
   "scripts": {
     "start": "node src/app.js",
-    "dev": "node --watch src/app.js"
+    "dev": "node --watch src/app.js",
+    "test": "mocha --require ./test/helpers/server.js \"test/integration/**/*.test.js\" --exit",
+    "test:integration": "mocha --require ./test/helpers/server.js \"test/integration/**/*.test.js\" --exit"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +21,13 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.7.5",
-    "multer": "^1.4.5-lts.1"
+    "multer": "^1.4.5-lts.1",
+    "swagger-jsdoc": "^6.3.0",
+    "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "chai": "^6.3.0",
+    "mocha": "^12.0.3",
+    "supertest": "^7.3.2"
   }
 }

@@ -1,4 +1,9 @@
+import mongoose from 'mongoose';
 import { usersService } from '../services/index.js';
+
+// Verifica que el identificador sea un ObjectId hexadecimal válido de 24 caracteres.
+const isValidObjectId = (id) =>
+    mongoose.Types.ObjectId.isValid(id) && /^[0-9a-fA-F]{24}$/.test(String(id));
 
 // Controlador para Usuarios.
 // Conecta las rutas de /api/users con usersService.
@@ -14,6 +19,9 @@ const getAllUsers = async (req, res) => {
 const getUser = async (req, res) => {
     try {
         const userId = req.params.uid;
+        if (!isValidObjectId(userId)) {
+            return res.status(400).send({ status: 'error', error: 'Invalid user ID' });
+        }
         const user = await usersService.getUserById(userId);
         if (!user) return res.status(404).send({ status: 'error', error: 'User not found' });
         res.send({ status: 'success', payload: user });
@@ -26,6 +34,9 @@ const updateUser = async (req, res) => {
     try {
         const updateBody = req.body;
         const userId = req.params.uid;
+        if (!isValidObjectId(userId)) {
+            return res.status(400).send({ status: 'error', error: 'Invalid user ID' });
+        }
         const user = await usersService.getUserById(userId);
         if (!user) return res.status(404).send({ status: 'error', error: 'User not found' });
         await usersService.update(userId, updateBody);
@@ -38,6 +49,9 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {
     try {
         const userId = req.params.uid;
+        if (!isValidObjectId(userId)) {
+            return res.status(400).send({ status: 'error', error: 'Invalid user ID' });
+        }
         const user = await usersService.getUserById(userId);
         if (!user) return res.status(404).send({ status: 'error', error: 'User not found' });
         await usersService.delete(userId);
